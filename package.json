@@ -1,0 +1,9 @@
+{
+  "name": "mission-control-sarmento",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Mission Control Sarmento — site com login, busca os dados ao Apps Script.",
+  "engines": {
+    "node": ">=18"
+  }
+}
