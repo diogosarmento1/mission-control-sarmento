@@ -6,11 +6,14 @@ module.exports = (req, res) => {
     return;
   }
 
-  const AUTH_USERNAME = process.env.AUTH_USERNAME || '';
-  const AUTH_PASSWORD_HASH = process.env.AUTH_PASSWORD_HASH || '';
-  const SESSION_SECRET = process.env.SESSION_SECRET || '';
+  // .trim() por segurança — um espaço/tab colado sem querer numa variável de
+  // ambiente já causou um bug confuso (chave a não bater certo) noutro sítio.
+  // AUTH_USERS é uma lista JSON de utilizadores, ex.:
+  // [{"username":"diogo","passwordHash":"..."},{"username":"chefe","passwordHash":"..."}]
+  const AUTH_USERS = (process.env.AUTH_USERS || '').trim();
+  const SESSION_SECRET = (process.env.SESSION_SECRET || '').trim();
 
-  if (!AUTH_USERNAME || !AUTH_PASSWORD_HASH || !SESSION_SECRET) {
+  if (!AUTH_USERS || !SESSION_SECRET) {
     res.status(500).send('Configuração em falta no servidor (variáveis de ambiente).');
     return;
   }
@@ -19,7 +22,7 @@ module.exports = (req, res) => {
   const username = String(body.username || '').trim();
   const password = String(body.password || '');
 
-  const ok = username === AUTH_USERNAME && auth.verificarPassword(password, AUTH_PASSWORD_HASH);
+  const ok = auth.autenticar(AUTH_USERS, username, password);
   if (!ok) {
     res.writeHead(302, { Location: '/login?erro=1' });
     res.end();
