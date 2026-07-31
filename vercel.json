@@ -2,10 +2,5 @@
   "rewrites": [
     { "source": "/login", "destination": "/login.html" },
     { "source": "/", "destination": "/api/dashboard" }
-  ],
-  "functions": {
-    "api/dashboard.js": {
-      "maxDuration": 60
-    }
-  }
+  ]
 }
