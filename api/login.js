@@ -24,7 +24,10 @@ module.exports = (req, res) => {
 
   const ok = auth.autenticar(AUTH_USERS, username, password);
   if (!ok) {
-    res.writeHead(302, { Location: '/login?erro=1' });
+    // Vai direto para login.html (em vez de /login, que depende do rewrite
+    // preservar o "?erro=1") — assim a mensagem de erro aparece sempre,
+    // sem depender de nenhum comportamento implícito da Vercel.
+    res.writeHead(302, { Location: '/login.html?erro=1' });
     res.end();
     return;
   }
